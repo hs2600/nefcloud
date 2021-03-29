@@ -1,10 +1,19 @@
 <?php 
 
+  function is_ajax_request() {
+    return isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+      $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
+  }
+
+if(!is_ajax_request()){ exit;}
+
 $fid = '';
 $t = '';
-if(isset($_GET['fid']) && isset($_GET['t'])){
-    $fid = $_GET['fid'];
-    $t = $_GET['t'];
+$error = '';
+// $message = '';
+if(isset($_POST['fid']) && isset($_POST['t'])){
+    $fid = $_POST['fid'];
+    $t = $_POST['t'];
 
     $file_id = $fid;
 
@@ -76,11 +85,11 @@ if(isset($_GET['fid']) && isset($_GET['t'])){
             try {
                 $result = $dynamodb->putItem($params);
                 $result2 = $dynamodb->putItem($params2);
-                echo "Added! ";
+                // echo "Added! ";
 
             } catch (DynamoDbException $e) {
-                echo "Unable to add item:\n";
-                echo $e->getMessage() . "\n";
+                $error = "Unable to add directory";
+                // echo $e->getMessage() . "\n";
             }
         }
     }
@@ -113,8 +122,10 @@ if(isset($_GET['fid']) && isset($_GET['t'])){
             exit;
         }
         $flag = 'false';
+        // $message = 'false';
     } else {
         $flag = 'true';
+        // $message = 'true';
     }
 
     //update item
@@ -145,14 +156,24 @@ if(isset($_GET['fid']) && isset($_GET['t'])){
     try {
         $result = $dynamodb->updateItem($params);
         // echo 'Updated item.'. $item['FileID'].'\n';
-        echo '['.$item['FileID'].']  ';
-        print_r($result['Attributes']);
+        // echo '['.$item['FileID'].']  ';
+        // print_r($result['Attributes']);
 
     } catch (DynamoDbException $e) {
         // Fail quietly
-        echo "Unable to update item:\n";
-        echo $e->getMessage() . "\n";
+        $error = "Unable to update item";
+        // echo $e->getMessage() . "\n";
     }
 }
+
+    if($error != "") {
+        $response['success'] = false;
+        $response['message'] = $error;
+    } else {
+        $response['success'] = true;
+        $response['message'] = $flag;
+    }
+
+    echo json_encode($response);
  
 ?> 

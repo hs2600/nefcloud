@@ -102,26 +102,25 @@ foreach ($results->search($expression) as $i) {
             } else {
                 $fflag = 0;
             }
-            $fav_color = 'gray2';
-            if($fflag){
-                $fav_color = 'yellow5';
-            }   
-
+            $fclass = '';
+                if($fflag){
+                    $fclass = 'favorite';
+            }    
 
             echo '<li style="width: 155px; height:180px; border:0px solid #e5e5e5; padding: 5px">';
-            echo '<div class="shadow-hover hover-bg-white" style="border: 1px solid #e5e5e5; border-radius: 5px; background-color: #fcfcfc; height: 100%">';
+            echo '<div id="'.$file_id.'" class="'.$fclass.'" style="transform: translateZ(0); border: 1px solid #e5e5e5; border-radius: 5px; background-color: #fcfcfc; height: 100%">';
             echo '  <a href="?dir='.base64_encode($path).'" class="flex flex-column items-center justify-center color-inherit w-100 pa2 br2 br--top no-underline hover-bg-blue3 hover-white gray5" style="height: 135px;">';
             echo '  <span class=""><i class="fas fa-folder" style="font-size: 90px"></i></span>';
             echo '  </a>';
             echo '  <div class="w-100 ph1 pv2 tc f2">';
             echo '  <span class="db gray5 hover-blue7 text select-all" style=" width: 135px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-block;" title="'.$dirname[0].'">'.$dirname[0].'</span>';
             echo '  </div>';
-            echo '  <a href="#" class="absolute top-025 right-025 gray4 hover-gray7" data-bs-toggle="modal" data-bs-target="#exModal" onclick="addCode(\''.$dirname[0].'\',\''. $afid .'\')">';
+            echo '  <a href="#" class="absolute top-025 right-025 gray4 hover-gray7" data-bs-toggle="modal" data-bs-target="#exModal" onclick="fileMenu(\''.$dirname[0].'\',\''. $afid .'\')">';
             echo '  <span data-balloon="More" data-balloon-pos="left" class="relative badge hover-bg-gray5 gray5 hover-white active-bg-red"><i class="fas fa-ellipsis-h" style="font-size: 12px;"></i></span>';
             echo '  </a>';
-            echo '  <a href="#" class="absolute bottom-075 right-025 '.$fav_color.' hover-yellow3" onclick="ajaxDBUpdate(\''.$afid.'\',\'favorite\')">';
+            echo '  <span class="favorite-button absolute bottom-075 right-025 gray2 hover-yellow3">';
             echo '  <i class="fas fa-star" style="font-size: 12px;"></i>';
-            echo '  </a>';             
+            echo '  </span>';
             echo '  </div></li>';
 
         }
@@ -174,9 +173,9 @@ try {
                 } else {
                     $fflag = 0;
                 }
-                $fav_color = 'gray2';
+                $fclass = '';
                 if($fflag){
-                    $fav_color = 'yellow5';
+                    $fclass = 'favorite';
                 }                
 
                 $file_size = $item["Size"];
@@ -260,9 +259,9 @@ try {
                     }
 
                     echo '<li style="width: 155px; height:180px; border:0px solid #e5e5e5; padding: 5px">';
+                    echo '<div id="'.$file_id.'" class="'.$fclass.'" style="transform: translateZ(0); border: 1px solid #e5e5e5; border-radius: 5px; background-color: #fcfcfc; height: 100%">';
 
                     if(in_array($file_type, $ext_img_arr)) {
-                        echo '<div class="shadow-hover hover-bg-white" style="border: 1px solid #e5e5e5; border-radius: 5px; background-color: #fcfcfc; height: 100%">';
                         echo '  <a href="/dashboard/file/?fid='.$file_id.'&r='.$r.'" class="flex flex-column items-center justify-center color-inherit w-100 pa2 br2 br--top" style="height: 135px;">';
                         echo '<div style="background-image: url(\''.$file_url.'\'); width: 100%;
                         height: 100%;
@@ -270,11 +269,9 @@ try {
                         background-size: cover;
                         " ></div>';
                     } else if(in_array($file_type, $ext_arr)) {
-                        echo '<div class="shadow-hover hover-bg-white" style="border: 1px solid #e5e5e5; border-radius: 5px; background-color: #fcfcfc; height: 100%">';
                         echo '  <a href="/dashboard/file/?fid='.$file_id.'&r='.$r.'" class="flex flex-column items-center justify-center color-inherit w-100 pa2 br2 br--top no-underline hover-bg-blue3 hover-white ' . $fonta_color . '" style="height: 135px;">';
                         echo '  <span class=""><i class="'.$font_awesome.'" style="font-size: 90px"></i></span>';
                     } else {
-                        echo '<div class="shadow-hover hover-bg-white" style="border: 1px solid #e5e5e5; border-radius: 5px; background-color: #fcfcfc; height: 100%">';
                         echo '  <a href="/dashboard/file/?fid='.$file_id.'&r='.$r.'" class="flex flex-column items-center justify-center color-inherit w-100 pa2 br2 br--top no-underline hover-bg-blue3 hover-white ' . $fonta_color . '" style="height: 135px;">';
                         echo '  <span class=""><i class="'.$font_awesome.'" style="font-size: 90px"></i></span>';
                     }
@@ -283,12 +280,13 @@ try {
                     echo '  <div class="w-100 ph1 pv2 tc f2">';
                     echo '  <span class="db gray5 hover-blue7" style=" width: 135px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-block;" title="'.$file_name.'">'.$file_name.'</span>';
                     echo '  </div>';
-                    echo '  <a href="#" class="absolute top-025 right-025 gray4 hover-gray7" data-bs-toggle="modal" data-bs-target="#exModal" onclick="addCode(\''.$file_name.' ('.$st.')\',\''.$file_id.'\')">';
+                    echo '  <a href="#" class="absolute top-025 right-025 gray4 hover-gray7" data-bs-toggle="modal" data-bs-target="#exModal" onclick="fileMenu(\''.$file_name.' ('.$st.')\',\''.$file_id.'\')">';
                     echo '  <span data-balloon="More" data-balloon-pos="left" class="relative badge hover-bg-gray4 gray5 hover-gray7"><i class="fas fa-ellipsis-h" style="font-size: 12px;"></i></span>';
                     echo '  </a>';
-                    echo '  <a href="#" class="absolute bottom-075 right-025 '.$fav_color.' hover-yellow3" onclick="ajaxDBUpdate(\''.$file_id.'\',\'favorite\')">';
+                    // echo '  <a href="#" class="absolute bottom-075 right-025 '.$fav_color.' hover-yellow3" onclick="ajaxDBUpdate(\''.$file_id.'\',\'favorite\')">';
+                    echo '  <span class="favorite-button absolute bottom-075 right-025 gray2 hover-yellow3" style="background-color: transparent; border: 0; cursor: pointer;">';
                     echo '  <i class="fas fa-star" style="font-size: 12px;"></i>';
-                    echo '  </a>';                    
+                    echo '  </span>';                    
                     echo '</div></li>';
                 }
             }

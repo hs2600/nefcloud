@@ -143,6 +143,10 @@ div.crumb {
   /* padding-bottom: 10px !important; */
 }
 
+.favorite .favorite-button {
+  color: #fcc419;
+}
+
 </style>
 
 <script>
@@ -410,18 +414,20 @@ div.crumb {
       <!-- List files section start -->
       <!-- The file upload form used as target for the file upload widget -->
       <?php
-       if($loc == 'dashboard'){
-        ?>
-
-      <form action="/dashboard/upload/"
-      class="dropzone text-left p-0 " enctype="multipart/form-data" id="dzUpload">
-      <input type="hidden" name="dir" value="{{ $dir }}">
-      @csrf
-      <?php
+        $dclass = "";
+        if($loc == 'dashboard'){
+            $dclass = "dropzone";
         }
       ?>
+
+      <form class=" {{ $dclass }} " id="dzUpload">
+      <input type="hidden" name="dir" value="{{ $dir }}">
+      @csrf
+
       @yield('content')
-                    
+
+      </form>
+
       <!-- List files section end -->
       </div>
 
@@ -587,6 +593,12 @@ div.crumb {
 
 <script>
 
+// $.ajaxSetup({
+//     headers: {
+//         'X-CSRF-TOKEN': "{{ csrf_token() }}"
+//     }
+// });
+
 function ajaxFolder(dname){
    
     var xhr = new XMLHttpRequest();
@@ -639,6 +651,7 @@ Dropzone.options.dzUpload = {
   // maxFiles: 10,
   // previewsContainer: null,
   disablePreviews: false,
+  url: "/dashboard/upload",
 
   totaluploadprogress: function totaluploadprogress(totaluploadprogress) {
     pb.style.visibility = 'visible';
@@ -664,9 +677,80 @@ Dropzone.options.dzUpload = {
 
 </script>
 
-
 <script src="/assets/js/bootstrap.bundle.min.js"></script>
 <script src="/assets/js/scripts.js"></script>
+
+<script>
+
+function test(){
+  console.log('test');
+}
+
+function favorite() {
+  var parent = this.parentElement;
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', '/dashboard/ajax/flag_update', true);
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+  xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}" );
+  xhr.onreadystatechange = function () {
+    if(xhr.readyState == 4 && xhr.status == 200) {
+      var result = xhr.responseText;
+      var data = JSON.parse(result);
+      if(data.success == true && data.message == 'true'){
+        // console.log('favorite = true');
+        parent.classList.add('favorite');
+      }
+      if(data.success == true && data.message == 'false'){
+        // console.log('favorite = false');
+        parent.classList.remove('favorite');
+      } 
+    }
+  };
+  xhr.send("fid=" + parent.id + "&t=favorite");
+}
+
+function ajaxFlagUpdate(fid,type){
+  var xhr = new XMLHttpRequest();
+  var fdiv = document.getElementById(fid);
+
+  xhr.open('POST', '/dashboard/ajax/flag_update', true);
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+  xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}" );
+  
+  xhr.onreadystatechange = function () {
+    if(xhr.readyState == 4 && xhr.status == 200) {
+      // console.log(type);
+      // if(type != 'shared'){
+      //   ajaxRefresh();
+      // }
+      if(type == 'deleted'){
+        location.reload(true);
+      }
+      if(type == 'favorite'){
+        var result = xhr.responseText;
+        var data = JSON.parse(result);
+        if(data.success == true){
+          if(data.message == 'true'){
+            fdiv.classList.add('favorite');
+          } else {
+            fdiv.classList.remove('favorite'); 
+          }
+        }
+      }
+    }
+   }
+  xhr.send("fid=" + fid + "&t=" + type);
+}
+
+var buttons = document.getElementsByClassName("favorite-button");
+for(i=0; i < buttons.length; i++) {
+  buttons.item(i).addEventListener("click", favorite);
+}
+
+</script>
 
 </body>
 </html>

@@ -1,14 +1,14 @@
 
-function addCode(name, ID) { 
+function fileMenu(name, ID) { 
   document.getElementById("title").innerHTML =  name;
   document.getElementById('copylink').onclick = function(){
     copyToClipboard(ID)
   }
   document.getElementById('delete').onclick = function(){
-    ajaxDBUpdate(ID,'deleted')
+    ajaxFlagUpdate(ID,'deleted')
   }
   document.getElementById('star').onclick = function(){
-    ajaxDBUpdate(ID,'favorite')
+    ajaxFlagUpdate(ID,'favorite')
   }
 } 
 
@@ -21,30 +21,13 @@ function copyToClipboard(val){
   input.select();
   document.execCommand("copy");
   input.style.display = 'none';
-  ajaxDBUpdate(val,'shared');
+  ajaxFlagUpdate(val,'shared');
   setTimeout(function(){
     document.getElementById('copy').innerHTML = "<b>Copied!</b>"
   }, 100); // seconds
   setTimeout(function(){
     document.getElementById('copy').innerHTML = "Copy Link"
   }, 2000); // seconds
-}
-
-function ajaxDBUpdate(fid,type){
-  var xhr = new XMLHttpRequest();
-  
-  var queryString = "?fid=" + fid + "&t=" + type;
-
-  xhr.open("GET", "/dashboard/flag_update" + queryString, true);
-  xhr.onreadystatechange = function () {
-    if(xhr.readyState == 4 && xhr.status == 200) {
-      if(type != 'shared'){
-        ajaxRefresh();
-      }
-      // location.reload(true);       
-    }
-   }
-  xhr.send();
 }
 
 function getDname(){
@@ -55,4 +38,5 @@ function getDname(){
   ajaxFolder(val);
   // window.alert(val);
 }
+
 

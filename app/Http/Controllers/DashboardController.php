@@ -166,7 +166,7 @@ class DashboardController extends Controller
     }  
 
     public function flagUpdate(){
-        return view('inc.flag_update', $this->awsSetup());
+        return view('pages.dashboard.ajax.flag_update', $this->awsSetup());
     }      
 
     // public function guestupload(){

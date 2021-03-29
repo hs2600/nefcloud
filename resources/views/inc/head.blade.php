@@ -17,6 +17,7 @@
   <link href="/assets/css/index.web-vfl_z8r43.css" rel="stylesheet"> 
   <link href="/assets/css/dropzone.css" rel="stylesheet">
   <script src="/assets/js/dropzone.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0Y3E4V9K3"></script>

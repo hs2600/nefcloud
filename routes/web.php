@@ -46,7 +46,7 @@ Route::get('/ajax/dashboard/', [\App\Http\Controllers\DashboardController::class
 Route::get('/ajax/dashboard/trash/', [\App\Http\Controllers\DashboardController::class, 'ajaxDel']);
 
 Route::match(array('GET', 'POST'),'/dashboard/upload/', [\App\Http\Controllers\DashboardController::class, 'upload']);
-Route::get('/dashboard/flag_update/', [\App\Http\Controllers\DashboardController::class, 'flagUpdate']);
+Route::post('/dashboard/ajax/flag_update/', [\App\Http\Controllers\DashboardController::class, 'flagUpdate']);
 
 //non authenticated
 Route::get('/share/{id}', [\App\Http\Controllers\GuestController::class, 'share']);
