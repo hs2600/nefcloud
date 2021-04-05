@@ -69,7 +69,9 @@ class DashboardController extends Controller
         $bc_dir = '';
         if(isset($_GET["dir"])){
             $dir = $_GET["dir"];
-            $dir = base64_decode($dir);
+            if(strpos($dir,"/") === false){
+                $dir = base64_decode($dir);
+            }            
             $dir = preg_replace('/[\x00-\x1F\x7F]/u', '', $dir);
             $dir = array_filter(explode("/",$dir));
             $dir = implode('/',$dir);

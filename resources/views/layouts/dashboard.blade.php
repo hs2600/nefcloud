@@ -7,8 +7,13 @@ use Illuminate\Http\Request;
 //get current url path
 $uri_split = array_filter(explode("?",$_SERVER['REQUEST_URI']));
 $urix = '';
+$urix_decoded = '';
 if(isset($_GET['dir'])){
   $urix = array_filter(explode("dir=",$_SERVER['REQUEST_URI']))[1];
+  $urix_decoded = $urix;
+  if(strpos($urix,"/") === false){
+    $urix_decoded = base64_decode($urix);
+  } 
 }
 $uri_split = array_filter(explode("/",$uri_split[0]));
 $loc = implode('/',array_slice($uri_split, -1));
@@ -388,7 +393,7 @@ div.crumb {
                     }
                 }
                if($loc == 'dashboard'){
-                echo '<button class="btn btn-sm p-0 m-0 ml-1" type="button" data-bs-toggle="modal" data-bs-target="#Modal1" style="border: none; background-color: transparent; cursor: pointer; height: 15px;"><i class="f4 p-0 m-0 fas fa-folder-plus" style="color: #3490dc;"></i></button>';
+                echo '<button class="p-0 m-0 ml-1" type="button" data-bs-toggle="modal" data-bs-target="#Modal1" style="border: none; background-color: transparent; cursor: pointer; height: 15px;"><i class="f4 p-0 m-0 fas fa-folder-plus" style="color: #3490dc;"></i></button>';
                }
             
               ?>
@@ -576,12 +581,12 @@ div.crumb {
 <div class="modal fade" id="Modal1" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="ModalLabel">Directory Name?</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="modal-header"><i class="fa fa-folder px-2 pr-4" style="color: #92ceff; font-size: 30px;"></i>
+        <h5 class="modal-title" id="ModalLabel">Create folder</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" tabindex="-1"></button>
       </div>
       <div class="modal-body">
-        <input name="dname" type="text" value="" class="form-control" placeholder="directory" required="" autocomplete="off" id="dirname">
+        <input name="dname" type="text" value="" class="form-control" placeholder="Folder name" required="" autocomplete="off" id="dirname" autofocus tabindex="0">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onClick="getDname()">Submit</button>
@@ -599,6 +604,12 @@ div.crumb {
 //     }
 // });
 
+$(document).ready(function() {
+  $('#Modal1').on('shown.bs.modal', function() {
+    $('#dirname').trigger('focus');
+  });
+});
+
 function ajaxFolder(dname){
    
     var xhr = new XMLHttpRequest();
@@ -609,8 +620,13 @@ function ajaxFolder(dname){
     xhr.send();
 
     xhr.onreadystatechange = function(){
-      if(xhr.readyState == 4){
-        location.reload(true);
+      if(xhr.readyState == 4 ){
+        console.log('test');
+      }
+      if(xhr.readyState == 4 && xhr.status == 200){
+        // location.reload(true);
+        window.location.href="/dashboard/?dir={{ $urix_decoded }}"+dname+"/";
+        // console.log("/dashboard/&dir={{ $urix_decoded }}"+dname);
       }
     }
 
@@ -639,6 +655,10 @@ function ajaxFolder(dname){
 
 var progdiv = document.getElementById('the-progress-div');
 var pb = document.getElementById('pb');
+
+// $('#uploadFile').click(function(){
+//   dzUpload.processQueue();
+// });
 
 Dropzone.options.dzUpload = {
   previewTemplate: document.querySelector('#tpl').innerHTML,

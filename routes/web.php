@@ -30,6 +30,8 @@ Route::get('/file', [\App\Http\Controllers\PagesController::class, 'file']);
 //sharing
 Route::get('/sh/{id}', [\App\Http\Controllers\PagesController::class, 'guest_share']);
 
+Route::get('/thumbnails/{url}', [\App\Http\Controllers\PagesController::class, 'img_resize']);
+
 Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'dashboard']);
 Route::get('/dashboard/favorites/', [\App\Http\Controllers\DashboardController::class, 'favorites']);
 Route::get('/dashboard/trash/', [\App\Http\Controllers\DashboardController::class, 'trash']);

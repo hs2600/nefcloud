@@ -118,7 +118,7 @@ foreach ($results->search($expression) as $i) {
             echo '  <a href="#" class="absolute top-025 right-025 gray4 hover-gray7" data-bs-toggle="modal" data-bs-target="#exModal" onclick="fileMenu(\''.$dirname[0].'\',\''. $afid .'\')">';
             echo '  <span data-balloon="More" data-balloon-pos="left" class="relative badge hover-bg-gray5 gray5 hover-white active-bg-red"><i class="fas fa-ellipsis-h" style="font-size: 12px;"></i></span>';
             echo '  </a>';
-            echo '  <span class="favorite-button absolute bottom-075 right-025 gray2 hover-yellow3">';
+            echo '  <span class="favorite-button absolute bottom-075 right-025 gray2 hover-yellow3" style="cursor: pointer;">';
             echo '  <i class="fas fa-star" style="font-size: 12px;"></i>';
             echo '  </span>';
             echo '  </div></li>';
@@ -263,6 +263,7 @@ try {
 
                     if(in_array($file_type, $ext_img_arr)) {
                         echo '  <a href="/dashboard/file/?fid='.$file_id.'&r='.$r.'" class="flex flex-column items-center justify-center color-inherit w-100 pa2 br2 br--top" style="height: 135px;">';
+                        // echo '<div style="background-image: url(\'/thumbnails/'.base64_encode($file_url).'\'); width: 100%;
                         echo '<div style="background-image: url(\''.$file_url.'\'); width: 100%;
                         height: 100%;
                         background-repeat: no-repeat;
@@ -283,7 +284,6 @@ try {
                     echo '  <a href="#" class="absolute top-025 right-025 gray4 hover-gray7" data-bs-toggle="modal" data-bs-target="#exModal" onclick="fileMenu(\''.$file_name.' ('.$st.')\',\''.$file_id.'\')">';
                     echo '  <span data-balloon="More" data-balloon-pos="left" class="relative badge hover-bg-gray4 gray5 hover-gray7"><i class="fas fa-ellipsis-h" style="font-size: 12px;"></i></span>';
                     echo '  </a>';
-                    // echo '  <a href="#" class="absolute bottom-075 right-025 '.$fav_color.' hover-yellow3" onclick="ajaxDBUpdate(\''.$file_id.'\',\'favorite\')">';
                     echo '  <span class="favorite-button absolute bottom-075 right-025 gray2 hover-yellow3" style="background-color: transparent; border: 0; cursor: pointer;">';
                     echo '  <i class="fas fa-star" style="font-size: 12px;"></i>';
                     echo '  </span>';                    

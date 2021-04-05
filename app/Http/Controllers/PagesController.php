@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\ImageModel;
+use Image;
 
 class PagesController extends Controller
 {
@@ -45,4 +47,10 @@ class PagesController extends Controller
     public function login($id){
         return view('pages.share.guest_share');
     }    
+    public function img_resize($url){
+        $img = Image::make(base64_decode($url))->resize(200, null, function ($constraint){
+            $constraint->aspectRatio();
+        });
+        return $img->response('jpg');
+    }
 }

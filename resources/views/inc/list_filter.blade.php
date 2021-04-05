@@ -96,7 +96,7 @@ try {
                 $st = $file_size. ' bytes';
             } else {
                 $factor = floor((strlen($file_size) - 1) / 3);
-                $st = '('.sprintf("%.2f", $file_size / pow(1024, $factor)) . @$sz[$factor].')';
+                $st = sprintf("%.2f", $file_size / pow(1024, $factor)) . @$sz[$factor];
             }    
 
             if($file_type == 'dir'){
@@ -191,10 +191,13 @@ try {
             echo '  <div class="w-100 ph1 pv2 tc f2">';
             echo '  <span class="db gray5 hover-blue7" style=" width: 135px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-block;" title="'.$file_name.'">'.$file_name.'</span>';
             echo '  </div>';
+            if ($file_type == 'dir'){
+            echo '  <a href="#" class="absolute top-025 right-025 gray4 hover-gray7" data-bs-toggle="modal" data-bs-target="#exModal" onclick="fileMenu(\''.$file_name.'\',\''. $file_id .'\')">';
+            } else  {
             echo '  <a href="#" class="absolute top-025 right-025 gray4 hover-gray7" data-bs-toggle="modal" data-bs-target="#exModal" onclick="fileMenu(\''.$file_name.' ('.$st.')\',\''.$file_id.'\')">';
+            }
             echo '  <span data-balloon="More" data-balloon-pos="left" class="relative badge hover-bg-gray4 gray5 hover-gray7"><i class="fas fa-ellipsis-h" style="font-size: 12px;"></i></span>';
             echo '  </a>';
-            // echo '  <a href="#" class="absolute bottom-075 right-025 '.$fav_color.' hover-yellow3" onclick="ajaxDBUpdate(\''.$file_id.'\',\'favorite\')">';
             echo '  <span class="favorite-button absolute bottom-075 right-025 gray2 hover-yellow3" style="background-color: transparent; border: 0; cursor: pointer;">';
             echo '  <i class="fas fa-star" style="font-size: 12px;"></i>';
             echo '  </span>';                    

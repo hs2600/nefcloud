@@ -12,7 +12,10 @@ if(isset($_GET["dname"])){
     $dname = array_filter(explode("/",$dname));
     $dname = implode('/',$dname);
 
-    $dir = base64_decode($_GET['dir']);
+    $dir = $_GET['dir'];
+    if(strpos($dir,"/") === false){
+        $dir = base64_decode($dir);
+    } 
     if($dir != ""){
         $dir_arr = array_filter(explode('/',$dir));
         $dir = implode('/',$dir_arr);
